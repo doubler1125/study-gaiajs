@@ -15,7 +15,9 @@ function openBucket(app: Application, config: CouchbaseConfig, name: string) {
 
   if (!bucket) {
     const cluster = new couchbase.Cluster(config.url);
-
+    if (config.username && config.password) {
+      cluster.authenticate(config.username, config.password);
+    }
     const start = Date.now();
     bucket = cluster.openBucket(config.bucket, err => {
       const tags: { [key: string]: string } = { operation: 'connect' };
